@@ -12,8 +12,26 @@
       <q-scroll-area class="fit">
         <div class="q-pa-md">
           <q-card class="dashboard-card q-mb-md">
+            <q-card-section>
+              <div class="text-h6">Add new liabilities</div>
+              <div class="text-caption text-grey-7">Create and assign liabilities to students.</div>
+            </q-card-section>
+            <q-card-actions align="left">
+              <q-btn color="green-8" label="Manage Liabilities" flat />
+            </q-card-actions>
           </q-card>
         </div>
+        <q-card class="dashboard-card q-mb-md">
+          <q-card-section>
+            <div class="text-h6">Verify submitted payments</div>
+            <div class="text-caption text-grey-7">
+              Review and approve student payment submissions.
+            </div>
+          </q-card-section>
+          <q-card-actions align="left">
+            <q-btn color="green-8" label="Manage payments" flat />
+          </q-card-actions>
+        </q-card>
       </q-scroll-area>
     </q-drawer>
 
@@ -34,9 +52,15 @@ export default defineComponent({
   name: 'OfficerDashboard',
   setup() {
     const leftDrawer = ref(false);
+
+    function selectCard(name: string) {
+      alert(`You clicked ${name}!`);
+    }
+
     const authStore = useAuthStore();
-    function logout() { authStore.logout(); }
-    function selectCard(name: string) { alert(`You clicked ${name}!`); }
+    function logout() {
+      authStore.logout();
+    }
 
     const loading = ref(false);
     const rows = ref<Liability[]>([]);
@@ -56,8 +80,11 @@ export default defineComponent({
     onMounted(fetchAllLiabilities);
 
     return {
-      leftDrawer, selectCard, logout,
-      loading, rows
+      leftDrawer,
+      selectCard,
+      logout,
+      loading,
+      rows
     };
   },
 });
