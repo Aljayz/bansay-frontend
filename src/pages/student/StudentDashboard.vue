@@ -113,6 +113,19 @@
 
     <q-page-container>
       <q-page padding class="bg-grey-1 flex flex-center flex-column">
+
+        <div class="row q-col-gutter-md q-mb-lg full-width">
+          <div class="col-12 col-md-4">
+            <q-card class="bg-primary text-white">
+              <q-card-section>
+                <div class="text-subtitle2">Total Outstanding Balance</div>
+                <div class="text-h3 text-weight-bold">
+                  ₱ {{ totalBalance.toLocaleString() }}
+                </div>
+              </q-card-section>
+            </q-card>
+          </div>
+        </div>
         <div class="row q-col-gutter-md">
           <div class="col-12 col-md-4">
             <q-card class="dashboard-card">
@@ -186,8 +199,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, onMounted } from 'vue';
 import { useAuthStore } from 'src/stores/auth-store';
+import { api } from 'src/boot/axios';
 
 export default defineComponent({
   name: 'StudentDashboard',
@@ -203,7 +217,25 @@ export default defineComponent({
       authStore.logout();
     }
 
-    return { leftDrawer, selectCard, logout };
+    const totalBalance = ref(0);
+
+    const fetchBalance = async () => {
+      try {
+        const { data } = await api.get('/liability/me');
+        totalBalance.value = data.totalOutstandingBalance;
+      } catch (error) {
+        console.error('Failed to fetch balance:', error);
+      }
+    };
+
+    onMounted(fetchBalance);
+
+    return {
+      leftDrawer,
+      selectCard,
+      logout,
+      totalBalance
+    };
   },
 });
 </script>
