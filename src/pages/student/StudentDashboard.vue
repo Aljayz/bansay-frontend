@@ -113,6 +113,31 @@
 
     <q-page-container>
       <q-page padding class="bg-grey-1 flex flex-center flex-column">
+
+        <div class="full-width q-mb-md">
+          <div class="text-h6 q-mb-sm">My Liabilities</div>
+          <q-table
+            flat
+            bordered
+            :rows="liabilities"
+            :columns="columns"
+            row-key="id"
+            :loading="loading"
+          >
+            <template v-slot:body-cell-status="props">
+              <q-td :props="props">
+                <q-chip
+                  :color="props.row.status === 'Unpaid' ? 'negative' : 'positive'"
+                  text-color="white"
+                  dense
+                  size="sm"
+                >
+                  {{ props.row.status }}
+                </q-chip>
+              </q-td>
+            </template>
+          </q-table>
+        </div>
         <div class="row q-col-gutter-md">
           <div class="col-12 col-md-4">
             <q-card class="dashboard-card">
@@ -186,8 +211,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, onMounted } from 'vue';
 import { useAuthStore } from 'src/stores/auth-store';
+import { api } from 'src/boot/axios';
+import type { Liability } from 'src/services/sdk';
+import type { QTableColumn } from 'quasar';
 
 export default defineComponent({
   name: 'StudentDashboard',
@@ -203,7 +231,63 @@ export default defineComponent({
       authStore.logout();
     }
 
-    return { leftDrawer, selectCard, logout };
+    const loading = ref(false);
+    const liabilities = ref<Liability[]>([]);
+
+    const columns: QTableColumn[] = [
+      {
+        name: 'type',
+        label: 'Type',
+        align: 'left',
+        field: 'type',
+        sortable: true
+      },
+      {
+        name: 'amount',
+        label: 'Amount',
+        align: 'right',
+        field: 'amount',
+        format: (val: number) => `₱ ${val.toLocaleString()}`,
+        sortable: true
+      },
+      {
+        name: 'dueDate',
+        label: 'Due Date',
+        align: 'left',
+        field: 'dueDate',
+        sortable: true
+      },
+      {
+        name: 'status',
+        label: 'Status',
+        align: 'center',
+        field: 'status',
+        sortable: true
+      },
+    ];
+
+    const fetchMyLiabilities = async () => {
+      loading.value = true;
+      try {
+        const { data } = await api.get('/liability/me');
+        liabilities.value = data.liabilities;
+      } catch (error) {
+        console.error('Failed to fetch liabilities:', error);
+      } finally {
+        loading.value = false;
+      }
+    };
+
+    onMounted(fetchMyLiabilities);
+
+    return {
+      leftDrawer,
+      selectCard,
+      logout,
+      liabilities,
+      columns,
+      loading
+    };
   },
 });
 </script>
