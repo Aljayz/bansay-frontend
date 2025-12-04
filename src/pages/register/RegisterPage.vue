@@ -15,8 +15,8 @@
         <q-form @submit.prevent="handleRegister" ref="registerForm" class="form-wrapper">
           <h1 class="register-title">Create Account</h1>
           
-          <div class="q-gutter-y-lg">
-            <div class="row q-gutter-md">
+          <div class="q-gutter-y-sm">
+            <div class="row q-gutter-sm">
               <div class="col">
                 <q-input
                   filled
@@ -280,7 +280,7 @@
             </q-select>
           </div>
 
-          <div class="q-mt-lg">
+          <div class="q-mt-sm">
             <q-btn 
               type="submit" 
               color="indigo" 
@@ -296,14 +296,14 @@
             </q-btn>
           </div>
 
-          <div class="q-mt-lg text-center">
+          <div class="q-mt-md text-center">
             <p class="text-body2">
               Already have an account?
               <router-link to="/login" class="text-indigo q-ml-xs">Login</router-link>
             </p>
           </div>
 
-          <div class="q-mt-lg text-center">
+          <div class="q-mt-sm text-center">
             <p class="text-caption text-grey-7">Or register with</p>
             <div class="social-icons q-mt-sm">
               <q-btn round color="red" icon="mdi-google" size="sm" />

@@ -22,7 +22,7 @@ const routes: RouteRecordRaw[] = [
       // { path: 'student-dashboard', component: () => import('pages/student/StudentDashboard.vue') },
       // { path: 'officer-dashboard', component: () => import('pages/Officer/OfficerDashboard.vue') },
       {
-        path: 'student-dashboard',
+        path: 'student-dashboard',      
         component: () => import('pages/student/StudentDashboard.vue'),
         meta: { requiresAuth: true, roles: ['Student'] },
       },
@@ -36,6 +36,20 @@ const routes: RouteRecordRaw[] = [
     path: '/student',
     component: () => import('pages/student/StudentDashboard.vue'),
   },
+
+
+  // {
+  //   path: '/admin',
+  //   component: () => import('layouts/AdminLayout.vue'),
+  //   meta: {requiresAuth: true, roles: ['Admin']},
+  //   children: [
+  //     {
+  //       path: '/admin-dashboard',
+  //       component: () => import('pages/Admin/AdminDashboard.vue'),
+  //     },
+  //   ]
+
+  // },
 
   // =================================================================
   // OFFICER ROUTES (NEW: Added OfficerLayout.vue)
@@ -76,12 +90,12 @@ const routes: RouteRecordRaw[] = [
     meta: { requiresAuth: true, roles: ['Admin'] },
     children: [
       {
-        path: '',
+        path: '/admin-dashboard',
         name: 'admin-dashboard',
         component: () => import('pages/Admin/AdminDashboard.vue'),
       },
       {
-        path: 'users',
+        path: '/user-management',
         name: 'user-management',
         component: () => import('pages/Admin/UserManagementPage.vue'),
       },
