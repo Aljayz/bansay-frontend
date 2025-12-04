@@ -153,6 +153,33 @@
               </template>
               <template v-slot:append>
                 <div class="flex items-center">
+                  <q-tooltip 
+                    v-if="password"
+                    anchor="top middle" 
+                    self="bottom middle"
+                    class="password-tooltip"
+                  >
+                    <div class="text-caption">
+                      <div class="text-weight-medium q-mb-xs">Password Requirements:</div>
+                      <ul class="q-ma-sm q-pl-sm">
+                        <li :class="{'text-positive': password.length >= 8}">
+                          At least 8 characters {{ password.length >= 8 ? '✓' : '' }}
+                        </li>
+                        <li :class="{'text-positive': /[A-Z]/.test(password)}">
+                          One uppercase letter {{ /[A-Z]/.test(password) ? '✓' : '' }}
+                        </li>
+                        <li :class="{'text-positive': /[a-z]/.test(password)}">
+                          One lowercase letter {{ /[a-z]/.test(password) ? '✓' : '' }}
+                        </li>
+                        <li :class="{'text-positive': /[0-9]/.test(password)}">
+                          One number {{ /[0-9]/.test(password) ? '✓' : '' }}
+                        </li>
+                        <li :class="{'text-positive': /[!@#$%^&*(),.?:{}|<>]/.test(password)}">
+                          One special character {{ /[!@#$%^&*(),.?:{}|<>]/.test(password) ? '✓' : '' }}
+                        </li>
+                      </ul>
+                    </div>
+                  </q-tooltip>
                   <div 
                     v-if="password" 
                     class="cursor-pointer q-mr-xs"
@@ -175,7 +202,6 @@
                   </div>
                 </div>
               </template>
-              
             </q-input>
           
             <q-input
@@ -296,7 +322,7 @@
 import { ref } from 'vue';
 import '../../assets/styles/auth.css';
 import { useRouter } from 'vue-router';
-import { QBtn, QForm } from 'quasar';
+import { QBtn, QForm, QTooltip } from 'quasar';
 import logo from '../../assets/logo.png';
 import { UserRegisterDtoRoleEnum } from 'src/services/sdk';
 import { useAuthStore } from 'src/stores/auth-store';
@@ -403,3 +429,14 @@ async function handleRegister() {
   }
 }
 </script>
+
+<style scoped>
+.password-tooltip {
+  max-width: 250px;
+  padding: 10px;
+}
+
+.password-tooltip ul li {
+  margin-bottom: 2px;
+}
+</style>
