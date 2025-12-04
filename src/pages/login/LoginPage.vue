@@ -24,26 +24,58 @@
               color="indigo"
               bg-color="indigo-2"
               dense
-              lazy-rules
             >
-              <template v-slot:append>
+              <template v-slot:prepend>
                 <q-icon name="mdi-account" color="indigo" />
+              </template>
+              <template v-slot:append>
+                <div 
+                  v-if="username" 
+                  class="cursor-pointer"
+                  @click="username = ''"
+                  tabindex="-1"
+                >
+                  <q-icon name="mdi-close" color="indigo" size="xs" />
+                </div>
               </template>
             </q-input>
   
             <q-input
               filled
               v-model="password"
+              :type="showPassword ? 'text' : 'password'"
               label="Password"
               placeholder="Enter your password"
-              type="password"
               color="indigo"
               bg-color="indigo-2"
               dense
-              lazy-rules
             >
-              <template v-slot:append>
+              <template v-slot:prepend>
                 <q-icon name="mdi-lock" color="indigo" />
+              </template>
+              <template v-slot:append>
+                <div class="flex items-center">
+                  <div 
+                    v-if="password" 
+                    class="cursor-pointer q-mr-xs"
+                    @click="togglePasswordVisibility"
+                    tabindex="-1"
+                  >
+                    <q-icon 
+                      :name="showPassword ? 'mdi-eye-off' : 'mdi-eye'" 
+                      color="indigo" 
+                      size="xs" 
+                    />
+                  </div>
+                  <div 
+                    v-if="password" 
+                    class="cursor-pointer"
+                    @click="password = ''"
+                    tabindex="-1"
+                  >
+                    <q-icon name="mdi-close" color="indigo" size="xs" />
+                  </div>
+                </div>
               </template>
             </q-input>
             
@@ -115,10 +147,15 @@ export default defineComponent({
     const username = ref('');
     const password = ref('');
     const loginForm = ref<QForm | null>(null);
+    const showPassword = ref(false);
     
     const loginError = ref<string>('');
     const hasError = ref<boolean>(false);
     const isLoading = ref<boolean>(false);
+
+    const togglePasswordVisibility = () => {
+      showPassword.value = !showPassword.value;
+    };
 
     const handleLogin = async () => {
       loginError.value = '';
@@ -174,6 +211,8 @@ export default defineComponent({
       username, 
       password, 
       loginForm, 
+      showPassword,
+      togglePasswordVisibility,
       handleLogin, 
       loginError, 
       hasError,

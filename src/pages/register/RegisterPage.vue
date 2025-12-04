@@ -26,12 +26,21 @@
                   color="indigo"
                   bg-color="indigo-2"
                   dense
-                  clearable
                   :rules="[val => !!val || 'First name is required']"
                   lazy-rules
                 >
-                  <template v-slot:append>
+                  <template v-slot:prepend>
                     <q-icon name="mdi-account" color="indigo" />
+                  </template>
+                  <template v-slot:append>
+                    <div 
+                      v-if="firstName" 
+                      class="cursor-pointer"
+                      @click="firstName = ''"
+                      tabindex="-1"
+                    >
+                      <q-icon name="mdi-close" color="grey-9" size="xs" />
+                    </div>
                   </template>
                 </q-input>
               </div>
@@ -44,12 +53,21 @@
                   color="indigo"
                   bg-color="indigo-2"
                   dense
-                  clearable
                   :rules="[val => !!val || 'Last name is required']"
                   lazy-rules
                 >
-                  <template v-slot:append>
+                  <template v-slot:prepend>
                     <q-icon name="mdi-account" color="indigo" />
+                  </template>
+                  <template v-slot:append>
+                    <div 
+                      v-if="lastName" 
+                      class="cursor-pointer"
+                      @click="lastName = ''"
+                      tabindex="-1"
+                    >
+                      <q-icon name="mdi-close" color="grey-9" size="xs" />
+                    </div>
                   </template>
                 </q-input>
               </div>
@@ -63,12 +81,21 @@
               color="indigo"
               bg-color="indigo-2"
               dense
-              clearable
               :rules="[val => !!val || 'Username is required']"
               lazy-rules
             >
-              <template v-slot:append>
+              <template v-slot:prepend>
                 <q-icon name="mdi-account-circle" color="indigo" />
+              </template>
+              <template v-slot:append>
+                <div 
+                  v-if="username" 
+                  class="cursor-pointer"
+                  @click="username = ''"
+                  tabindex="-1"
+                >
+                  <q-icon name="mdi-close" color="grey-9" size="xs" />
+                </div>
               </template>
             </q-input>
             
@@ -81,57 +108,117 @@
               color="indigo"
               bg-color="indigo-2"
               dense
-              clearable
               :rules="[
                 val => !!val || 'Email is required',
-                val => /.+@.+\..+/.test(val) || 'Please enter a valid email'
+                val => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val) || 'Please enter a valid email address'
               ]"
               lazy-rules
             >
-              <template v-slot:append>
+              <template v-slot:prepend>
                 <q-icon name="mdi-email" color="indigo" />
+              </template>
+              <template v-slot:append>
+                <div 
+                  v-if="email" 
+                  class="cursor-pointer"
+                  @click="email = ''"
+                  tabindex="-1"
+                >
+                  <q-icon name="mdi-close" color="grey-9" size="xs" />
+                </div>
               </template>
             </q-input>
             
             <q-input
               filled
               v-model="password"
+              :type="showPassword ? 'text' : 'password'"
               label="Password"
               placeholder="Enter password"
-              type="password"
               color="indigo"
               bg-color="indigo-2"
               dense
-              clearable
               :rules="[
                 val => !!val || 'Password is required',
-                val => val.length >= 6 || 'Password must be at least 6 characters'
+                val => val.length >= 8 || 'Password must be at least 8 characters',
+                val => /[A-Z]/.test(val) || 'Must contain at least one uppercase letter',
+                val => /[a-z]/.test(val) || 'Must contain at least one lowercase letter',
+                val => /[0-9]/.test(val) || 'Must contain at least one number',
+                val => /[!@#$%^&*(),.?:{}|<>]/.test(val) || 'Must contain at least one special character'
               ]"
               lazy-rules
             >
-              <template v-slot:append>
+              <template v-slot:prepend>
                 <q-icon name="mdi-lock" color="indigo" />
               </template>
+              <template v-slot:append>
+                <div class="flex items-center">
+                  <div 
+                    v-if="password" 
+                    class="cursor-pointer q-mr-xs"
+                    @click="togglePasswordVisibility"
+                    tabindex="-1"
+                  >
+                    <q-icon 
+                      :name="showPassword ? 'mdi-eye-off' : 'mdi-eye'" 
+                      color="grey-9" 
+                      size="xs" 
+                    />
+                  </div>
+                  <div 
+                    v-if="password" 
+                    class="cursor-pointer"
+                    @click="password = ''"
+                    tabindex="-1"
+                  >
+                    <q-icon name="mdi-close" color="grey-9" size="xs" />
+                  </div>
+                </div>
+              </template>
+              
             </q-input>
           
             <q-input
               filled
               v-model="confirmPassword"
+              :type="showConfirmPassword ? 'text' : 'password'"
               label="Retype Password"
               placeholder="Confirm password"
-              type="password"
               color="indigo"
               bg-color="indigo-2"
               dense
-              clearable
               :rules="[
                 val => !!val || 'Please confirm your password',
                 val => val === password || 'Passwords do not match'
               ]"
               lazy-rules
             >
-              <template v-slot:append>
+              <template v-slot:prepend>
                 <q-icon name="mdi-lock-check" color="indigo" />
+              </template>
+              <template v-slot:append>
+                <div class="flex items-center">
+                  <div 
+                    v-if="confirmPassword" 
+                    class="cursor-pointer q-mr-xs"
+                    @click="toggleConfirmPasswordVisibility"
+                    tabindex="-1"
+                  >
+                    <q-icon 
+                      :name="showConfirmPassword ? 'mdi-eye-off' : 'mdi-eye'" 
+                      color="grey-9" 
+                      size="xs" 
+                    />
+                  </div>
+                  <div 
+                    v-if="confirmPassword" 
+                    class="cursor-pointer"
+                    @click="confirmPassword = ''"
+                    tabindex="-1"
+                  >
+                    <q-icon name="mdi-close" color="grey-9" size="xs" />
+                  </div>
+                </div>
               </template>
             </q-input>
             
@@ -151,8 +238,18 @@
               lazy-rules
               style="height: 56px;"
             >
-              <template v-slot:append>
+              <template v-slot:prepend>
                 <q-icon name="mdi-account-switch" color="indigo"/>
+              </template>
+              <template v-slot:append>
+                <div 
+                  v-if="selectedRole" 
+                  class="cursor-pointer"
+                  @click="selectedRole = null"
+                  tabindex="-1"
+                >
+                  <q-icon name="mdi-close" color="grey-9" size="xs" />
+                </div>
               </template>
             </q-select>
           </div>
@@ -217,6 +314,16 @@ const confirmPassword = ref('');
 const selectedRole = ref<UserRegisterDtoRoleEnum | null>(null);
 const registerForm = ref<QForm | null>(null);
 const isLoading = ref(false);
+const showPassword = ref(false);
+const showConfirmPassword = ref(false);
+
+const togglePasswordVisibility = () => {
+  showPassword.value = !showPassword.value;
+};
+
+const toggleConfirmPasswordVisibility = () => {
+  showConfirmPassword.value = !showConfirmPassword.value;
+};
 
 const roles = [
   { label: 'Student', value: UserRegisterDtoRoleEnum.Student },
