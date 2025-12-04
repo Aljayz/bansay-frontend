@@ -1,7 +1,7 @@
 <template>
   <q-page class="bg-grey-2 flex flex-center">
     <div class="container">
-      <q-form @submit.prevent="handleLogin" ref="loginForm">
+      <q-form @submit.prevent="handleLogin" ref="loginForm" class="q-gutter-y-md ">
         <div class="logo-header">
           <img :src="logo" alt="Bansay Logo" class="logo" />
           <h2 class="app-title">Bansay App</h2>
@@ -9,7 +9,7 @@
 
         <h1 class="login-title">Login</h1>
 
-        <div class="input-box">
+        <div class="q-gutter-y-md">
           <q-input
             filled
             v-model="username"
@@ -18,16 +18,12 @@
             color="indigo"
             bg-color="indigo-2"
             dense
-            clearable
-            :rules="[(val) => !!val || 'Please enter your username']"
           >
             <template v-slot:append>
               <q-icon name="mdi-account" color="indigo" />
             </template>
           </q-input>
-        </div>
-
-        <div class="input-box">
+  
           <q-input
             filled
             v-model="password"
@@ -37,20 +33,34 @@
             color="indigo"
             bg-color="indigo-2"
             dense
-            clearable
-            :rules="[(val) => !!val || 'Please enter your password']"
           >
             <template v-slot:append>
               <q-icon name="mdi-lock" color="indigo" />
             </template>
           </q-input>
+          <div v-if="hasError" class="flex items-center text-red q-mt-md q-pa-sm rounded-borders bg-red-2">
+            <q-icon name="error" color="red"/>
+            <span class="q-ml-sm">Incorrect username or password</span>
+          </div>
         </div>
 
         <div class="forgot-link">
           <a href="#">Forgot Password?</a>
         </div>
 
-        <q-btn type="submit" color="indigo" label="Login" class="full-width" />
+        <q-btn 
+          type="submit" 
+          color="indigo" 
+          :label="isLoading ? 'Loading...' : 'Login'" 
+          class="full-width"
+          :loading="isLoading"
+          :disable="isLoading"
+        >
+          <template v-slot:loading>
+            <q-spinner-hourglass class="on-left" />
+            Loading...
+          </template>
+        </q-btn>
 
         <p>
           Don't have an account?
@@ -87,10 +97,22 @@ export default defineComponent({
     const username = ref('');
     const password = ref('');
     const loginForm = ref<QForm | null>(null);
+    
+    const loginError = ref<string>('');
+    const hasError = ref<boolean>(false);
+    const isLoading = ref<boolean>(false);
 
     const handleLogin = async () => {
+      loginError.value = '';
+      hasError.value = false;
+      isLoading.value = true;
+
       const valid = await loginForm.value?.validate();
-      if (valid !== true) return;
+      if (valid !== true) {
+        hasError.value = true;
+        isLoading.value = false;
+        return;
+      }
 
       try {
         const response = await authStore.login({
@@ -114,20 +136,31 @@ export default defineComponent({
           message: 'Login successful',
         });
       } catch (error: unknown) {
-        const errorMessage =
-          error instanceof Error && error.message
-          ? 'Wrong username or password'
+        hasError.value = true;
+        loginError.value = error instanceof Error && error.message
+          ? 'Incorrect username or password'
           : 'Login failed';
           $q.notify({
             type: 'negative',
-            message: errorMessage,
+            message: loginError.value,
             position: 'top',
             timeout: 3000,
         });
+      } finally {
+        isLoading.value = false;
       }
     };
 
-    return { logo, username, password, loginForm, handleLogin };
+    return { 
+      logo, 
+      username, 
+      password, 
+      loginForm, 
+      handleLogin, 
+      loginError, 
+      hasError,
+      isLoading 
+    };
   },
 });
 </script>
