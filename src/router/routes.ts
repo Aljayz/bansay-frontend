@@ -22,7 +22,7 @@ const routes: RouteRecordRaw[] = [
       // { path: 'student-dashboard', component: () => import('pages/student/StudentDashboard.vue') },
       // { path: 'officer-dashboard', component: () => import('pages/Officer/OfficerDashboard.vue') },
       {
-        path: 'student-dashboard',      
+        path: 'student-dashboard',
         component: () => import('pages/student/StudentDashboard.vue'),
         meta: { requiresAuth: true, roles: ['Student'] },
       },
@@ -98,6 +98,11 @@ const routes: RouteRecordRaw[] = [
         path: '/user-management',
         name: 'user-management',
         component: () => import('pages/Admin/UserManagementPage.vue'),
+      },
+      {
+        path: 'pending-approval',
+        name: 'pending-approval',
+        component: () => import('pages/Admin/PendingApprovalPage.vue'),
       },
     ],
   },
