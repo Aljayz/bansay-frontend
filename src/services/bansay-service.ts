@@ -9,14 +9,9 @@ import {
   type MyLiabilitiesResponseDto,
   type LiabilityControllerFindAllStatusEnum,
   type LiabilityControllerFindAllSortOrderEnum,
-<<<<<<< HEAD
-  // SIR
-  // UserApi,
-=======
   type User,
   type UserControllerGetUsersStatusEnum,
   type UserControllerGetUsersRoleEnum,
->>>>>>> 3d38e8f32056ac709df954665e05ce936ec73e06
 } from './sdk';
 
 export interface QueryLiabilityParams {
@@ -33,12 +28,6 @@ export interface UpdateLiabilityDto {
   dueDate?: string;
 }
 
-<<<<<<< HEAD
-// SIR
-const isDevEnv = process.env.ENV == 'development';
-const baseUrl: string = isDevEnv ? 'http://localhost:3030' :
-  'https://6f12ecy5s4.execute-api.us-east-2.amazonaws.com/prod';
-=======
 export interface UserApiResponse {
   data: {
     data: User[];
@@ -61,7 +50,6 @@ export interface PendingUser {
   role: UserControllerGetUsersRoleEnum;
   status: UserControllerGetUsersStatusEnum;
 }
->>>>>>> 3d38e8f32056ac709df954665e05ce936ec73e06
 
 export class BansayService {
   private static instance?: BansayService;
@@ -78,30 +66,16 @@ export class BansayService {
     accessToken: () => localStorage.getItem('accessToken') || '', //needs local storage token for auth
   });
 
-<<<<<<< HEAD
-  // SIR
-  // private userApi = new UserApi({
-  //    basePath: baseUrl,
-  //   isJsonMime: () => true,
-  //   accessToken: () => localStorage.getItem('accessToken') || '', //needs local storage token for auth
-  // })
-=======
   private userApi = new UserApi({
     basePath: baseUrl,
     isJsonMime: () => true,
     accessToken: () => localStorage.getItem('accessToken') || '',
   });
->>>>>>> 3d38e8f32056ac709df954665e05ce936ec73e06
 
   static getInstance() {
     this.instance = this.instance || new BansayService();
     return this.instance;
   }
-
-  //SIR
-  // findUsers() {
-  //   this.userApi.userControllerGetUsers('Pending', '')
-  // }
 
   // for authentication
   async loginUser(data: UserLoginDto) {
