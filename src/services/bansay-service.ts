@@ -8,6 +8,8 @@ import {
   type MyLiabilitiesResponseDto,
   type LiabilityControllerFindAllStatusEnum,
   type LiabilityControllerFindAllSortOrderEnum,
+  // SIR
+  // UserApi,
 } from './sdk';
 
 export interface QueryLiabilityParams {
@@ -24,7 +26,8 @@ export interface UpdateLiabilityDto {
   dueDate?: string;
 }
 
-const isDevEnv = process.env.NODE_ENV == 'development';
+// SIR
+const isDevEnv = process.env.ENV == 'development';
 const baseUrl: string = isDevEnv ? 'http://localhost:3030' :
   'https://6f12ecy5s4.execute-api.us-east-2.amazonaws.com/prod';
 
@@ -43,10 +46,22 @@ export class BansayService {
     accessToken: () => localStorage.getItem('accessToken') || '', //needs local storage token for auth
   });
 
+  // SIR
+  // private userApi = new UserApi({
+  //    basePath: baseUrl,
+  //   isJsonMime: () => true,
+  //   accessToken: () => localStorage.getItem('accessToken') || '', //needs local storage token for auth
+  // })
+
   static getInstance() {
     this.instance = this.instance || new BansayService();
     return this.instance;
   }
+
+  //SIR
+  // findUsers() {
+  //   this.userApi.userControllerGetUsers('Pending', '')
+  // }
 
   // for authentication
   async loginUser(data: UserLoginDto) {
