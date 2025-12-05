@@ -21,11 +21,19 @@ const routes: RouteRecordRaw[] = [
       // These dashboard routes are redundant and removed to avoid conflict:
       // { path: 'student-dashboard', component: () => import('pages/student/StudentDashboard.vue') },
       // { path: 'officer-dashboard', component: () => import('pages/Officer/OfficerDashboard.vue') },
+<<<<<<< HEAD
       // {
       //   path: 'student-dashboard',      
       //   component: () => import('pages/student/StudentDashboard.vue'),
       //   meta: { requiresAuth: true, roles: ['Student'] },
       // },
+=======
+      {
+        path: 'student-dashboard',
+        component: () => import('pages/student/StudentDashboard.vue'),
+        meta: { requiresAuth: true, roles: ['Student'] },
+      },
+>>>>>>> 3d38e8f32056ac709df954665e05ce936ec73e06
     ],
   },
 
@@ -122,6 +130,11 @@ const routes: RouteRecordRaw[] = [
         path: 'user-management',
         component: () => import('pages/Admin/UserManagementPage.vue'),
         name: 'admin-user-management',
+      },
+      {
+        path: 'pending-approval',
+        name: 'pending-approval',
+        component: () => import('pages/Admin/PendingApprovalPage.vue'),
       },
     ],
   },

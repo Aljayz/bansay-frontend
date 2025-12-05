@@ -1,4 +1,5 @@
 <template>
+<<<<<<< HEAD
   <q-layout>
     <!-- Use the AppHeader component -->
     <AppHeader
@@ -14,6 +15,52 @@
       @logout-clicked="handleLogout"
       @logout-confirmed="confirmLogout"
     />
+=======
+  <q-layout view="lHh Lpr lFf">
+    <q-header elevated>
+      <q-toolbar>
+        <q-btn flat dense round icon="menu" aria-label="Menu" @click="toggleLeftDrawer" />
+        <q-toolbar-title>Bansay App</q-toolbar-title>
+        <div>Quasar v{{ $q.version }}</div>
+      </q-toolbar>
+    </q-header>
+
+    <q-drawer v-model="leftDrawerOpen" show-if-above bordered class="bg-grey-1">
+      <q-scroll-area class="fit">
+        <dev class="q-pa-md"></dev>
+        <q-card class="dashboard-card q-mb-md" clickable v-ripple></q-card>
+        <div class="col-12 col-md-4">
+          <q-card class="dashboard-card">
+            <q-card-section>
+              <div class="text-h6">User Management</div>
+              <div class="text-caption text-grey-7">Manage user accounts and permissions.</div>
+            </q-card-section>
+            <q-card-actions align="left">
+              <q-btn
+                :to="{ name: 'user-management' }"
+                color="red-8"
+                label="Manage Users"
+                flat
+                @click="leftDrawerOpen = false"
+              />
+            </q-card-actions>
+          </q-card>
+        </div>
+        <q-card class="dashboard-card q-mb-md" clickable v-ripple></q-card>
+        <div class="col-12 col-md-4"></div>
+
+        <q-card class="dashboard-card">
+          <q-card-section>
+            <div class="text-h6">System Settings</div>
+            <div class="text-caption text-grey-7">Configure system preferences and settings.</div>
+          </q-card-section>
+          <q-card-actions align="left">
+            <q-btn color="red-8" label="Settings" flat @click="leftDrawerOpen = false" />
+          </q-card-actions>
+        </q-card>
+      </q-scroll-area>
+    </q-drawer>
+>>>>>>> 3d38e8f32056ac709df954665e05ce936ec73e06
 
     <q-page-container>
       <router-view />

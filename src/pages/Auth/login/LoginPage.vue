@@ -181,7 +181,11 @@ export default defineComponent({
         } else if (role === 'Officer') {
           await router.push('/officer/dashboard');
         } else if (role === 'Admin') {
+<<<<<<< HEAD:src/pages/Auth/login/LoginPage.vue
           await router.push('/admin/dashboard');
+=======
+          await router.push('/admin');
+>>>>>>> 3d38e8f32056ac709df954665e05ce936ec73e06:src/pages/login/LoginPage.vue
         } else {
           // Fallback if role doesn't match or is missing
           void router.push('/');
