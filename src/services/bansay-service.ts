@@ -9,6 +9,7 @@ import {
   type MyLiabilitiesResponseDto,
   type LiabilityControllerFindAllStatusEnum,
   type LiabilityControllerFindAllSortOrderEnum,
+  type User,
   type UserControllerGetUsersStatusEnum,
   type UserControllerGetUsersRoleEnum,
 } from './sdk';
@@ -27,6 +28,19 @@ export interface UpdateLiabilityDto {
   dueDate?: string;
 }
 
+export interface UserApiResponse {
+  data: {
+    data: User[];
+    count: number;
+  };
+  status: number;
+  statusText: string;
+}
+
+const isDevEnv = process.env.ENV == 'development';
+const baseUrl: string = isDevEnv
+  ? 'http://localhost:3030'
+  : 'https://6f12ecy5s4.execute-api.us-east-2.amazonaws.com/prod';
 export interface PendingUser {
   id?: number;
   username: string;
@@ -36,10 +50,6 @@ export interface PendingUser {
   role: UserControllerGetUsersRoleEnum;
   status: UserControllerGetUsersStatusEnum;
 }
-
-const isDevEnv = process.env.NODE_ENV == 'development';
-const baseUrl: string = isDevEnv ? 'http://localhost:3030' :
-  'https://6f12ecy5s4.execute-api.us-east-2.amazonaws.com/prod';
 
 export class BansayService {
   private static instance?: BansayService;
@@ -104,14 +114,13 @@ export class BansayService {
     if (response.status == 200) {
       return response.data;
     } else {
-      throw new Error(response.statusText || "Failed to get current user");
+      throw new Error(response.statusText || 'Failed to get current user');
     }
   }
 
   logout() {
     localStorage.removeItem('accessToken');
   }
-
 
   // liability services
 
@@ -139,7 +148,7 @@ export class BansayService {
       query?.status,
       query?.studentUsername,
       query?.sortBy,
-      query?.sortOrder
+      query?.sortOrder,
     );
     if (response.status === 200) {
       return response.data;
@@ -173,6 +182,26 @@ export class BansayService {
     }
   }
 
+  // Users services
+
+  // Users: Get the list of users
+  async getAllUsers(
+    status?: UserControllerGetUsersStatusEnum,
+    role?: UserControllerGetUsersRoleEnum,
+  ): Promise<User[]> {
+    try {
+      const response = (await this.userApi.userControllerGetUsers(
+        status,
+        role,
+      )) as unknown as UserApiResponse;
+      const users = response.data.data ?? [];
+
+      return users;
+    } catch (err) {
+      console.error('Failed to fetch users', err);
+      return [];
+    }
+ }
   // Get users with filters (admin only)
   async getUsers(
     status?: UserControllerGetUsersStatusEnum,
