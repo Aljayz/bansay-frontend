@@ -22,6 +22,7 @@ export interface UpdateLiabilityDto {
   type?: 'tuition' | 'fee' | 'fine' | 'other';
   amount?: number;
   dueDate?: string;
+  status?: LiabilityControllerFindAllStatusEnum;
 }
 
 const isDevEnv = process.env.NODE_ENV == 'development';
