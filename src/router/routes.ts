@@ -5,7 +5,7 @@ const routes: RouteRecordRaw[] = [
     path: '/',
     component: () => import('layouts/AuthLayout.vue'),
     children: [
-      { path: '', redirect: {name: 'login'} },
+      { path: '', redirect: { name: 'login' } },
 
       {
         path: 'login',
@@ -22,7 +22,7 @@ const routes: RouteRecordRaw[] = [
       // { path: 'student-dashboard', component: () => import('pages/student/StudentDashboard.vue') },
       // { path: 'officer-dashboard', component: () => import('pages/Officer/OfficerDashboard.vue') },
       // {
-      //   path: 'student-dashboard',      
+      //   path: 'student-dashboard',
       //   component: () => import('pages/student/StudentDashboard.vue'),
       //   meta: { requiresAuth: true, roles: ['Student'] },
       // },
@@ -35,29 +35,29 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/student',
     component: () => import('layouts/StudentLayout.vue'),
-    meta: {requiresAuth: true, roles: ['Student']},
+    meta: { requiresAuth: true, roles: ['Student'] },
     children: [
       {
-        path: '', redirect: {name: 'student-dashboard'}
+        path: '', redirect: { name: 'student-dashboard' }
       },
       {
         path: 'dashboard',
-        component: () => import('pages/Student/StudentDashboard.vue'),
+        component: () => import('pages/student/StudentDashboard.vue'),
         name: 'student-dashboard'
       },
       {
         path: 'liability',
-        component: () => import('pages/Student/LiabilitiesSummary.vue'),
+        component: () => import('pages/student/LiabilitiesSummary.vue'),
         name: 'student-liability'
       },
       {
         path: 'payment',
-        component: () => import('pages/Student/SettlePaymentPage.vue'),
+        component: () => import('pages/student/SettlePaymentPage.vue'),
         name: 'student-payment'
       },
       {
         path: 'appeal',
-        component: () => import('pages/Student/AppealSubmissionPage.vue'),
+        component: () => import('pages/student/AppealSubmissionPage.vue'),
         name: 'student-appeal'
       }
 
@@ -72,7 +72,7 @@ const routes: RouteRecordRaw[] = [
     component: () => import('layouts/OfficerLayout.vue'), // << New Officer Layout
     children: [
       {
-        path: '', redirect: {name: 'officer-dashboard'}
+        path: '', redirect: { name: 'officer-dashboard' }
       },
       {
         path: 'dashboard',
@@ -111,7 +111,7 @@ const routes: RouteRecordRaw[] = [
     meta: { requiresAuth: true, roles: ['Admin'] },
     children: [
       {
-        path: '', redirect: {name: 'admin-dashboard'}
+        path: '', redirect: { name: 'admin-dashboard' }
       },
       {
         path: 'dashboard',
