@@ -320,10 +320,10 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import '../../assets/styles/auth.css';
+import 'src/assets/styles/auth.css';
 import { useRouter } from 'vue-router';
 import { QBtn, QForm, QTooltip } from 'quasar';
-import logo from '../../assets/logo.png';
+import logo from 'src/assets/logo.png';
 import { UserRegisterDtoRoleEnum } from 'src/services/sdk';
 import { useAuthStore } from 'src/stores/auth-store';
 import { useQuasar } from 'quasar';
@@ -438,5 +438,15 @@ async function handleRegister() {
 
 .password-tooltip ul li {
   margin-bottom: 2px;
+}
+</style>
+
+<style lang="css" scoped>
+.q-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(90deg, #e2e2e2, #c9d6ff);
 }
 </style>

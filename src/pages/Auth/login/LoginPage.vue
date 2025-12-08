@@ -130,10 +130,10 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import '../../assets/styles/auth.css';
+import 'src/assets/styles/auth.css';
 import { useRouter } from 'vue-router';
 import { QBtn, QForm, QIcon, useQuasar } from 'quasar';
-import logo from '../../assets/logo.png';
+import logo from 'src/assets/logo.png';
 import { useAuthStore } from 'src/stores/auth-store';
 
 export default defineComponent({
@@ -177,11 +177,11 @@ export default defineComponent({
 
         const role = response.user?.role;
         if (role === 'Student') {
-          await router.push('/student-dashboard');
+          await router.push('/student/dashboard');
         } else if (role === 'Officer') {
-          await router.push('/officer-dashboard');
+          await router.push('/officer/dashboard');
         } else if (role === 'Admin') {
-          await router.push('/admin');
+          await router.push('/admin/dashboard');
         } else {
           // Fallback if role doesn't match or is missing
           void router.push('/');
@@ -221,3 +221,13 @@ export default defineComponent({
   },
 });
 </script>
+
+<style lang="css" scoped>
+.q-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(90deg, #e2e2e2, #c9d6ff);
+}
+</style>
