@@ -1,64 +1,19 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <q-header elevated class="bg-indigo-7">
-      <q-toolbar>
-        <q-btn flat dense round icon="menu" aria-label="Menu" @click="toggleLeftDrawer" />
-        <q-toolbar-title>BANSAY Officer Panel</q-toolbar-title>
-        <q-btn flat round icon="person" aria-label="Profile" />
-      </q-toolbar>
-    </q-header>
-
-    <q-drawer v-model="leftDrawerOpen" show-if-above bordered class="bg-grey-1">
-      <q-scroll-area class="fit q-pa-md">
-        <div class="text-h5 q-mb-md">Officer Functions</div>
-
-        <q-card class="dashboard-card q-mb-md" clickable v-ripple>
-          <q-card-section>
-            <div class="text-h6">Liability Management</div>
-            <div class="text-caption text-grey-7">Add, edit, or cancel student liabilities.</div>
-          </q-card-section>
-          <q-card-actions align="left">
-            <q-btn :to="{ name: 'liability-management' }" label="Manage Liabilities" flat />
-          </q-card-actions>
-        </q-card>
-
-        <q-card class="dashboard-card q-mb-md" clickable v-ripple>
-          <q-card-section>
-            <div class="text-h6">Appeal Review</div>
-            <div class="text-caption text-grey-7">
-              View and act on student reconsideration requests.
-            </div>
-          </q-card-section>
-          <q-card-actions align="left">
-            <q-btn :to="{ name: 'appeal-review' }" label="Review Appeals" flat />
-          </q-card-actions>
-        </q-card>
-
-        <q-card class="dashboard-card q-mb-md" clickable v-ripple>
-          <q-card-section>
-            <div class="text-h6">Payment Verification</div>
-            <div class="text-caption text-grey-7">
-              Validate and clear submitted proofs of payment.
-            </div>
-          </q-card-section>
-          <q-card-actions align="left">
-            <q-btn :to="{ name: 'payment-verification' }" label="Verify Payments" flat />
-          </q-card-actions>
-        </q-card>
-
-        <q-card class="dashboard-card q-mb-md" clickable v-ripple>
-          <q-card-section>
-            <div class="text-h6">Generate Reports</div>
-            <div class="text-caption text-grey-7">
-              Filter summaries of outstanding and collected fines.
-            </div>
-          </q-card-section>
-          <q-card-actions align="left">
-            <q-btn :to="{ name: 'officer-reports' }" label="Reports" flat />
-          </q-card-actions>
-        </q-card>
-      </q-scroll-area>
-    </q-drawer>
+  <q-layout>
+    <!-- Use the AppHeader component -->
+    <AppHeader
+      :user-role="userRole"
+      :user-display-name="userDisplayName"
+      :user-email="currentUserEmail"
+      :user-avatar="userAvatarUrl"
+      :app-name="appName"
+      :show-menu-button="true"
+      @toggle-left-drawer="toggleLeftDrawer"
+      @profile-clicked="handleProfile"
+      @settings-clicked="handleSettings"
+      @logout-clicked="handleLogout"
+      @logout-confirmed="confirmLogout"
+    />
 
     <q-page-container>
       <router-view />
@@ -67,18 +22,59 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
+import { useAuthStore } from 'src/stores/auth-store';
+import AppHeader from 'src/components/AppHeader.vue';
 
 const leftDrawerOpen = ref(false);
+const authStore = useAuthStore();
 
-function toggleLeftDrawer() {
+// User data computed properties
+const userRole = computed(() => {
+  return authStore.currentUser?.role || 'User';
+});
+
+const userDisplayName = computed(() => {
+  const name = authStore.currentUser?.username || 'User';
+  return name?.split(' ')[0] || 'User';
+});
+
+const currentUserEmail = computed(() => {
+  return authStore.currentUser?.email || 'user@example.com';
+});
+
+const userAvatarUrl = computed(() => {
+  return 'https://cdn.quasar.dev/img/avatar.png';
+});
+
+// App config
+const appName = 'Bansay';
+
+// Event handlers
+const toggleLeftDrawer = () => {
   leftDrawerOpen.value = !leftDrawerOpen.value;
-}
+};
+
+const handleProfile = () => {
+  console.log('Navigate to profile');
+  // Or use router: router.push('/profile');
+};
+
+const handleSettings = () => {
+  console.log('Navigate to settings');
+  // Or use router: router.push('/settings');
+};
+
+const handleLogout = () => {
+  console.log('Logout initiated - showing confirmation dialog');
+};
+
+const confirmLogout = () => {
+  try {
+    authStore.logout();
+    // Redirect to login page or handle post-logout
+  } catch (error) {
+    console.error('Logout failed:', error);
+  }
+};
 </script>
-<style scoped>
-.dashboard-card {
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  cursor: pointer;
-}
-</style>
