@@ -21,72 +21,55 @@
             </q-card-actions>
           </q-card>
         </div>
-        <q-card class="dashboard-card q-mb-md">
-          <q-card-section>
-            <div class="text-h6">Verify submitted payments</div>
-            <div class="text-caption text-grey-7">
-              Review and approve student payment submissions.
-            </div>
-          </q-card-section>
-          <q-card-actions align="left">
-            <q-btn color="green-8" label="Manage payments" flat />
-          </q-card-actions>
-        </q-card>
+        <div class="q-pa-md">
+          <q-card class="dashboard-card q-mb-md">
+            <q-card-section>
+              <div class="text-h6">Verify submitted payments</div>
+              <div class="text-caption text-grey-7">
+                Review and approve student payment submissions.
+              </div>
+            </q-card-section>
+            <q-card-actions align="left">
+              <q-btn color="green-8" label="Manage payments" flat />
+            </q-card-actions>
+          </q-card>
+        </div>
       </q-scroll-area>
     </q-drawer>
 
     <q-page-container>
       <q-page padding>
+        <div v-if="liabilityStore.loading" class="text-center q-pa-md">
+          <q-spinner color="primary" size="3em" />
+          <div class="text-grey">Loading liabilities...</div>
+        </div>
+
+        <div v-else>
+          <div class="text-h6 q-mb-md">
+            Total Liabilities Fetched: {{ liabilityStore.liabilities.length }}
+          </div>
+        </div>
       </q-page>
     </q-page-container>
   </q-layout>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue';
+<script setup lang="ts">
+import { ref, onMounted } from 'vue';
 import { useAuthStore } from 'src/stores/auth-store';
-import { api } from 'src/boot/axios';
-import type { Liability } from 'src/services/sdk';
+import { useLiabilityStore } from 'src/stores/liability-store';
 
-export default defineComponent({
-  name: 'OfficerDashboard',
-  setup() {
-    const leftDrawer = ref(false);
+const leftDrawer = ref(false);
+const authStore = useAuthStore();
+const liabilityStore = useLiabilityStore();
 
-    function selectCard(name: string) {
-      alert(`You clicked ${name}!`);
-    }
+function logout() {
+  authStore.logout();
+}
 
-    const authStore = useAuthStore();
-    function logout() {
-      authStore.logout();
-    }
-
-    const loading = ref(false);
-    const rows = ref<Liability[]>([]);
-
-    const fetchAllLiabilities = async () => {
-      loading.value = true;
-      try {
-        const { data } = await api.get('/liability');
-        rows.value = data as unknown as Liability[];
-      } catch (error) {
-        console.error('Failed to fetch officer dashboard data:', error);
-      } finally {
-        loading.value = false;
-      }
-    };
-
-    onMounted(fetchAllLiabilities);
-
-    return {
-      leftDrawer,
-      selectCard,
-      logout,
-      loading,
-      rows
-    };
-  },
+// Task 7: Fetch All Liabilities on Mount using Store
+onMounted(async () => {
+  await liabilityStore.fetchAllLiabilities();
 });
 </script>
 
