@@ -9,241 +9,110 @@
     </q-header>
 
     <q-drawer v-model="leftDrawer" show-if-above bordered class="bg-grey-1">
-      <q-scroll-area class="fit">
-        <div class="q-pa-md">
-          <q-card
-            class="dashboard-card q-mb-md"
+      <div class="q-pa-md">
+        <q-list padding>
+          <q-item
             clickable
-            v-ripple
-            @click="selectCard('Liabilities')"
-          ></q-card>
-
-          <div class="col-12 col-md-4">
-            <q-card class="dashboard-card">
-              <q-card-section>
-                <div class="text-h6">Liabilities</div>
-                <div class="text-caption text-grey-7">
-                  View your assigned liabilities and details.
-                </div>
-              </q-card-section>
-              <q-card-actions align="right">
-                <q-btn color="primary" label="View Liabilities" flat />
-              </q-card-actions>
-            </q-card>
-          </div>
-
-          <q-card
-            class="dashboard-card q-mb-md"
-            clickable
-            v-ripple
-            @click="selectCard('File Appeal')"
+            :active="selectedSection === 'Overview'"
+            @click="selectedSection = 'Overview'"
           >
-          </q-card>
-          <div class="col-12 col-md-4">
-            <q-card class="dashboard-card">
-              <q-card-section>
-                <div class="text-h6">File Appeal</div>
-                <div class="text-caption text-grey-7">Request reconsideration for a liability.</div>
-              </q-card-section>
-              <q-card-actions align="right">
-                <q-btn color="warning" label="File Appeal" flat />
-              </q-card-actions>
-            </q-card>
-          </div>
+            <q-item-section avatar>
+              <q-icon name="dashboard" />
+            </q-item-section>
+            <q-item-section>Overview</q-item-section>
+          </q-item>
 
-          <q-card
-            class="dashboard-card q-mb-md"
+          <q-item
             clickable
-            v-ripple
-            @click="selectCard('Proof of Payment')"
+            :active="selectedSection === 'My Liabilities'"
+            @click="selectedSection = 'My Liabilities'"
           >
-          </q-card>
+            <q-item-section avatar>
+              <q-icon name="list" />
+            </q-item-section>
+            <q-item-section>My Liabilities</q-item-section>
+          </q-item>
 
-          <div class="col-12 col-md-4">
-            <q-card class="dashboard-card">
-              <q-card-section>
-                <div class="text-h6">Proof of Payment</div>
-                <div class="text-caption text-grey-7">Submit proof for online settlement.</div>
-              </q-card-section>
-              <q-card-actions align="right">
-                <q-btn color="secondary" label="Submit Proof" flat />
-              </q-card-actions>
-            </q-card>
-          </div>
-        </div>
+          <q-item
+            clickable
+            :active="selectedSection === 'Submit Appeal'"
+            @click="selectedSection = 'Submit Appeal'"
+          >
+            <q-item-section avatar>
+              <q-icon name="report_problem" />
+            </q-item-section>
+            <q-item-section>File Appeal</q-item-section>
+          </q-item>
 
-        <q-card
-          class="dashboard-card q-mb-md"
-          clickable
-          v-ripple
-          @click="selectCard('Status Updates')"
-        >
-          <div class="q-mt-xl">
-            <div class="text-subtitle1 q-mb-sm">Status Updates</div>
-
-            <q-card>
-              <q-card-section>
-                <div class="text-body2 text-grey-7">
-                  Track your payment and appeal statuses here.
-                </div>
-              </q-card-section>
-
-              <q-separator />
-
-              <q-list bordered separator>
-                <q-item>
-                  <q-item-section>
-                    <div class="text-body1">Payment</div>
-                    <div class="text-caption text-positive">Status: Verified</div>
-                  </q-item-section>
-                </q-item>
-
-                <q-item>
-                  <q-item-section>
-                    <div class="text-body1">Appeal</div>
-                    <div class="text-caption text-warning">Status: Pending Review</div>
-                  </q-item-section>
-                </q-item>
-              </q-list>
-            </q-card>
-          </div>
-        </q-card>
-      </q-scroll-area>
+          <q-item
+            clickable
+            :active="selectedSection === 'My Record'"
+            @click="selectedSection = 'My Record'"
+          >
+            <q-item-section avatar>
+              <q-icon name="history" />
+            </q-item-section>
+            <q-item-section>My Record</q-item-section>
+          </q-item>
+        </q-list>
+      </div>
     </q-drawer>
 
     <q-page-container>
-      <q-page padding class="bg-grey-1 flex flex-center flex-column">
-
-        <div class="row q-col-gutter-md q-mb-lg full-width">
-          <div class="col-12 col-md-4">
-            <q-card class="bg-primary text-white">
-              <q-card-section>
-                <div class="text-subtitle2">Total Outstanding Balance</div>
-                <div class="text-h3 text-weight-bold">
-                  ₱ {{ totalBalance.toLocaleString() }}
-                </div>
-              </q-card-section>
-            </q-card>
-          </div>
-        </div>
-        <div class="row q-col-gutter-md">
-          <div class="col-12 col-md-4">
-            <q-card class="dashboard-card">
-              <q-card-section>
-                <div class="text-h6">Liabilities</div>
-                <div class="text-caption text-grey-7">
-                  View your assigned liabilities and details.
-                </div>
-              </q-card-section>
-              <q-card-actions align="right">
-                <q-btn color="primary" label="View Liabilities" flat />
-              </q-card-actions>
-            </q-card>
-          </div>
-
-          <div class="col-12 col-md-4">
-            <q-card class="dashboard-card">
-              <q-card-section>
-                <div class="text-h6">File Appeal</div>
-                <div class="text-caption text-grey-7">Request reconsideration for a liability.</div>
-              </q-card-section>
-              <q-card-actions align="right">
-                <q-btn color="warning" label="File Appeal" flat />
-              </q-card-actions>
-            </q-card>
-          </div>
-
-          <div class="col-12 col-md-4">
-            <q-card class="dashboard-card">
-              <q-card-section>
-                <div class="text-h6">Proof of Payment</div>
-                <div class="text-caption text-grey-7">Submit proof for online settlement.</div>
-              </q-card-section>
-              <q-card-actions align="right">
-                <q-btn color="secondary" label="Submit Proof" flat />
-              </q-card-actions>
-            </q-card>
-          </div>
-        </div>
-
-        <div class="q-mt-xl">
-          <div class="text-subtitle1 q-mb-sm">Status Updates</div>
-
-          <q-card>
-            <q-card-section>
-              <div class="text-body2 text-grey-7">Track your payment and appeal statuses here.</div>
-            </q-card-section>
-
-            <q-separator />
-
-            <q-list bordered separator>
-              <q-item>
-                <q-item-section>
-                  <div class="text-body1">Payment</div>
-                  <div class="text-caption text-positive">Status: Verified</div>
-                </q-item-section>
-              </q-item>
-
-              <q-item>
-                <q-item-section>
-                  <div class="text-body1">Appeal</div>
-                  <div class="text-caption text-warning">Status: Pending Review</div>
-                </q-item-section>
-              </q-item>
-            </q-list>
-          </q-card>
-        </div>
+      <q-page padding>
+        <OverviewSection
+          v-if="selectedSection === 'Overview'"
+          :student-summary="studentSummary"
+          :recent-liabilities="recentLiabilities"
+          :upcoming-due="upcomingDue"
+        />
+        <LiabilitiesSection v-if="selectedSection === 'My Liabilities'" />
+        <AppealSection v-if="selectedSection === 'Submit Appeal'" />
+        <RecordSection v-if="selectedSection === 'My Record'" />
       </q-page>
     </q-page-container>
   </q-layout>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue';
+<script setup lang="ts">
+import { ref, onMounted, computed } from 'vue';
 import { useAuthStore } from 'src/stores/auth-store';
-import { api } from 'src/boot/axios';
+import { useLiabilityStore } from 'src/stores/liability-store';
 
-export default defineComponent({
-  name: 'StudentDashboard',
-  setup() {
-    const leftDrawer = ref(false);
+// Components
+import OverviewSection from 'src/components/OverviewSection.vue';
+import LiabilitiesSection from 'src/components/LiabilitiesSection.vue';
+import AppealSection from 'src/components/AppealSection.vue';
+import RecordSection from 'src/components/MyRecordSection.vue';
 
-    function selectCard(name: string) {
-      alert(`You clicked ${name}!`);
-    }
+// State
+const leftDrawer = ref(false);
+const selectedSection = ref('Overview');
+const authStore = useAuthStore();
+const liabilityStore = useLiabilityStore();
 
-    const authStore = useAuthStore();
-    function logout() {
-      authStore.logout();
-    }
+function logout() {
+  authStore.logout();
+}
 
-    const totalBalance = ref(0);
+onMounted(async () => {
+  await liabilityStore.fetchMyLiabilities();
+});
 
-    const fetchBalance = async () => {
-      try {
-        const { data } = await api.get('/liability/me');
-        totalBalance.value = data.totalOutstandingBalance;
-      } catch (error) {
-        console.error('Failed to fetch balance:', error);
-      }
-    };
+const studentSummary = computed(() => ({
+  totalBalance: `₱ ${liabilityStore.totalOutstandingBalance.toLocaleString()}`,
+  unpaidLiabilities: liabilityStore.unpaidLiabilities.length,
+  pendingAppeals: 0,
+  pendingPayment: '₱ 0'
+}));
 
-    onMounted(fetchBalance);
+const recentLiabilities = computed(() => {
+  return liabilityStore.myLiabilities.slice(0, 5).map(l => `${l.type} - ₱${l.amount.toLocaleString()}`);
+});
 
-    return {
-      leftDrawer,
-      selectCard,
-      logout,
-      totalBalance
-    };
-  },
+const upcomingDue = computed(() => {
+  return liabilityStore.unpaidLiabilities
+    .slice(0, 5)
+    .map(l => `${l.dueDate} - ${l.type}`);
 });
 </script>
-
-<style scoped>
-.dashboard-card {
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  cursor: pointer;
-}
-</style>
