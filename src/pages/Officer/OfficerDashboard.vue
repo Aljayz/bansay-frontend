@@ -1,48 +1,28 @@
 <template>
-    <q-page-container>
-      <div v-if="showLiabilities">
-        <q-table
-          title="Liabilities"
-          :rows="liabilityStore.liabilities"
-          :columns="[
-            { name: 'id', field: (row) => row.student.id, label: 'ID', sortable: false },
-            {
-              name: 'student',
-              field: (row) => row.student.username,
-              label: 'Student',
-              sortable: true,
-            },
-            { name: 'type', field: 'type', label: 'Type', sortable: true },
-            { name: 'amount', field: (row) => Number(row.amount), label: 'Amount', sortable: true },
-            { name: 'status', field: 'status', label: 'Status', sortable: true },
-            { name: 'dueDate', field: 'dueDate', label: 'Due Date', sortable: true },
-          ]"
-        />
+  <q-page padding>
+    <div v-if="liabilityStore.loading" class="text-center q-pa-md">
+      <q-spinner color="primary" size="3em" />
+      <div class="text-grey">Loading liabilities...</div>
+    </div>
+
+    <div v-else>
+      <div class="text-h6 q-mb-md">
+        Total Liabilities Fetched: {{ liabilityStore.liabilities.length }}
       </div>
-    </q-page-container>
+    </div>
+  </q-page>
 </template>
 
 <script setup lang="ts">
-// import { nextTick, ref } from 'vue';
-import { ref } from 'vue';
-// import { useAuthStore } from 'src/stores/auth-store';
+import { onMounted } from 'vue';
 import { useLiabilityStore } from 'src/stores/liability-store';
 
-const showLiabilities = ref(false);
 const liabilityStore = useLiabilityStore();
-// const authStore = useAuthStore();
 
-// Fetches the liability data.
-// async function viewLiabilities() {
-//   await liabilityStore.fetchAllLiabilities();
-//   leftDrawer.value = false;
-//   showLiabilities.value = true;
-//   await nextTick();
-// }
-
-// function logout() {
-//   authStore.logout();
-// }
+// Task 7: Fetch All Liabilities on Mount using Store
+onMounted(async () => {
+  await liabilityStore.fetchAllLiabilities();
+});
 </script>
 
 <style scoped>
