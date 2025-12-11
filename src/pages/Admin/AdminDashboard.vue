@@ -39,7 +39,7 @@
         <q-card class="my-card bg-white text-primary shadow-2" clickable @click="router.push({ name: 'pending-approval'})">
           <q-card-section>
             <div class="text-h6 text-grey-8">Pending Approvals</div>
-            <div class="text-h3 text-weight-bolder text-orange-8 q-mt-sm">18</div>
+            <div class="text-h3 text-weight-bolder text-orange-8 q-mt-sm">{{ userStore.pendingCount }}</div>
           </q-card-section>
           <q-card-section class="row items-center justify-end q-pt-none">
             <q-icon name="pending_actions" color="orange-8" size="4em" style="opacity: 0.2" />
@@ -78,30 +78,32 @@
               bordered
               :pagination="pagination"
             >
-              <template v-slot:body-cell-status="props">
-                <q-td :props="props">
-                  <q-badge :color="props.row.status === 'Active' ? 'green' : 'red'">
-                    {{ props.row.status }}
-                  </q-badge>
-                </q-td>
-              </template>
-
-              <template v-slot:body-cell-actions="props">
-                <q-td :props="props">
-                  <q-btn flat round color="blue" icon="edit" size="sm">
-                    <q-tooltip>Edit User</q-tooltip>
-                  </q-btn>
-                  <q-btn
-                    flat
-                    round
-                    color="red"
-                    icon="block"
-                    size="sm"
-                    @click="deactivateUser(props.row)"
-                  >
-                    <q-tooltip>Deactivate</q-tooltip>
-                  </q-btn>
-                </q-td>
+              <template v-slot:body="props">
+                <q-tr :props="props">
+                  <q-td key="id" :props="props">{{ props.row.studentId }}</q-td>
+                  <q-td key="name" :props="props">{{ props.row.name }}</q-td>
+                  <q-td key="role" :props="props">{{ props.row.role }}</q-td>
+                  <q-td key="status" :props="props">
+                    <q-badge :color="props.row.status === 'Active' ? 'green' : 'red'">
+                      {{ props.row.status }}
+                    </q-badge>
+                  </q-td>
+                  <q-td key="actions" :props="props">
+                    <q-btn flat round color="blue" icon="edit" size="sm">
+                      <q-tooltip>Edit User</q-tooltip>
+                    </q-btn>
+                    <q-btn
+                      flat
+                      round
+                      color="red"
+                      icon="block"
+                      size="sm"
+                      @click="deactivateUser(props.row)"
+                    >
+                      <q-tooltip>Deactivate</q-tooltip>
+                    </q-btn>
+                  </q-td>
+                </q-tr>
               </template>
             </q-table>
           </q-card-section>
@@ -112,11 +114,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useQuasar, type QTableColumn } from 'quasar';
 import { useRouter } from 'vue-router';
+import { useUserStore } from 'src/stores/user-store';
 
-// --- DATA TYPES ---
 interface User {
   id: number;
   studentId: string;
@@ -125,12 +127,11 @@ interface User {
   status: 'Active' | 'Inactive';
 }
 
-// --- VARIABLES ---
 const $q = useQuasar();
 const router = useRouter();
+const userStore = useUserStore();
 const filter = ref('');
 
-// --- TABLE CONFIG ---
 const columns: QTableColumn[] = [
   { name: 'id', align: 'left', label: 'ID Number', field: 'studentId', sortable: true },
   { name: 'name', align: 'left', label: 'Full Name', field: 'name', sortable: true },
@@ -147,17 +148,10 @@ const users = ref<User[]>([
   { id: 1, studentId: '2021-00123', name: 'Juan Dela Cruz', role: 'Student', status: 'Active' },
   { id: 2, studentId: '2020-04512', name: 'Maria Clara', role: 'Student', status: 'Active' },
   { id: 3, studentId: 'EMP-9921', name: 'Mr. Pedro Santos', role: 'Officer', status: 'Active' },
-  {
-    id: 4,
-    studentId: '2022-00111',
-    name: 'Crisostomo Ibarra',
-    role: 'Student',
-    status: 'Inactive',
-  },
+  { id: 4, studentId: '2022-00111', name: 'Crisostomo Ibarra', role: 'Student', status: 'Inactive' },
   { id: 5, studentId: 'EMP-1102', name: 'Ms. Sisa Baliw', role: 'Officer', status: 'Active' },
 ]);
 
-// --- FUNCTIONS ---
 function deactivateUser(row: User) {
   $q.dialog({
     title: 'Confirm Deactivation',
@@ -173,6 +167,10 @@ function deactivateUser(row: User) {
     });
   });
 }
+
+onMounted(async () => {
+  await userStore.fetchPendingCount();
+});
 </script>
 
 <style scoped>
