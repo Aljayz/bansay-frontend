@@ -26,6 +26,7 @@ export interface UpdateLiabilityDto {
   type?: 'tuition' | 'fee' | 'fine' | 'other';
   amount?: number;
   dueDate?: string;
+  status?: LiabilityControllerFindAllStatusEnum;
 }
 
 export interface UserApiResponse {

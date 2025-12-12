@@ -345,9 +345,30 @@ export default defineComponent({
       // TODO: Populate a form with liability data (Sprint 3)
     };
 
-    const markAsPaid = (liability: Liability) => {
-      $q.notify({ message: `Marking Liability ID: ${liability.id} as Paid (TODO: API Call)` });
-      // TODO: Implement API call to update status (Sprint 3)
+    const markAsPaid = async (liability: Liability) => {
+      try {
+        $q.loading.show();
+        await liabilityStore.updateLiability(liability.id, { status: 'Paid' });
+        $q.notify({
+          type: 'positive',
+          message: 'Liability marked as paid successfully',
+        });
+        // Refresh the table
+        const minimalProps: MinimalRequestProps = {
+          pagination: pagination.value,
+          getCellValue: () => null,
+        };
+        onRequest(minimalProps as RequestProp);
+      } catch (err) {
+        const message = err instanceof Error ? err.message : 'Unknown error';
+        $q.notify({
+          type: 'negative',
+          message: 'Failed to update liability status',
+          caption: message,
+        });
+      } finally {
+        $q.loading.hide();
+      }
     };
 
     // NEW: Function to handle form submission
