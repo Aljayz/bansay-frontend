@@ -14,13 +14,7 @@
 
     <div class="row q-col-gutter-sm q-mb-md">
       <div class="col-12 col-md-3">
-        <q-input
-          v-model="searchText"
-          dense
-          outlined
-          label="Search Student ID or Name"
-          clearable
-        >
+        <q-input v-model="searchText" dense outlined label="Search Student ID or Name" clearable>
           <template v-slot:append>
             <q-icon name="search" />
           </template>
@@ -99,12 +93,7 @@
             </q-td>
 
             <q-td key="status" :props="props">
-              <q-chip
-                :color="getStatusColor(props.row.status)"
-                text-color="white"
-                dense
-                size="sm"
-              >
+              <q-chip :color="getStatusColor(props.row.status)" text-color="white" dense size="sm">
                 {{ props.row.status }}
               </q-chip>
             </q-td>
@@ -136,8 +125,20 @@ const dateFilter = ref('');
 
 // Columns
 const columns: QTableColumn[] = [
-  { name: 'id', label: 'Student ID', field: (row: Liability) => row.student?.username, align: 'left', sortable: true },
-  { name: 'student', label: 'Name', field: (row: Liability) => row.student?.lastName, align: 'left', sortable: true },
+  {
+    name: 'id',
+    label: 'Student ID',
+    field: (row: Liability) => row.student?.username,
+    align: 'left',
+    sortable: true,
+  },
+  {
+    name: 'student',
+    label: 'Name',
+    field: (row: Liability) => row.student?.lastName,
+    align: 'left',
+    sortable: true,
+  },
   { name: 'type', label: 'Type', field: 'type', align: 'left', sortable: true },
   { name: 'amount', label: 'Amount', field: 'amount', align: 'right', sortable: true },
   { name: 'status', label: 'Status', field: 'status', align: 'center', sortable: true },
@@ -182,10 +183,14 @@ function formatCurrency(value: number | undefined) {
 
 function getStatusColor(status: string) {
   switch (status) {
-    case 'Paid': return 'positive';
-    case 'Unpaid': return 'negative';
-    case 'Cancelled': return 'grey';
-    default: return 'grey';
+    case 'Paid':
+      return 'positive';
+    case 'Unpaid':
+      return 'negative';
+    case 'Cancelled':
+      return 'grey';
+    default:
+      return 'grey';
   }
 }
 

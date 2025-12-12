@@ -8,28 +8,36 @@ import {
 
 export interface UserState {
   users: User[];
+  pendingCount: number;
   loading: boolean;
 }
 
 export const useUserStore = defineStore('users', {
   state: (): UserState => ({
     users: [],
+    pendingCount: 0,
     loading: false,
   }),
 
   actions: {
-    // Get the list of users
     async fetchUsers(
       status?: UserControllerGetUsersStatusEnum,
       role?: UserControllerGetUsersRoleEnum,
     ) {
       this.loading = true;
       try {
-        const result = await BansayService.getInstance().getAllUsers(status, role);
-        this.users = result;
+        this.users = await BansayService.getInstance().getAllUsers(status, role);
       } finally {
         this.loading = false;
       }
     },
+
+    async fetchPendingCount() {
+      try {
+        this.pendingCount = await BansayService.getInstance().getPendingRegistrationCount();
+      } catch (error) {
+        console.error('Failed to fetch pending count:', error);
+      }
+    }
   },
 });

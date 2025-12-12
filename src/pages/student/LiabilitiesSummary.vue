@@ -1,15 +1,15 @@
 <template>
   <q-page class="q-pa-lg">
-    <div class="text-h4 text-indigo-8 q-mb-md">My Liabilities Summary</div>
-    <q-separator />
-    <p class="q-mt-lg text-grey-7">
-      This page will display the list of liabilities and the total outstanding balance (Sprint 2).
-    </p>
-    <q-card flat bordered class="q-pa-md bg-indigo-1">
-      <div class="text-h6 text-indigo-7">Total Outstanding: [Data will be loaded here]</div>
-    </q-card>
+    <liabilities-section
+      :loading="liabilityStore.loading"
+      :liabilities="liabilityStore.myLiabilities"
+    />
   </q-page>
 </template>
 <script setup lang="ts">
+import LiabilitiesSection from 'src/components/LiabilitiesSection.vue';
+import { useLiabilityStore } from 'src/stores/liability-store';
+
+const liabilityStore = useLiabilityStore();
 // Placeholder script
 </script>
