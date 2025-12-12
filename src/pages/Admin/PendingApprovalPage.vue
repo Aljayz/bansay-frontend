@@ -31,14 +31,14 @@
                     label="Approve"
                     color="positive"
                     size="sm"
-                    @click="approveUser(user.username)"
+                    @click="approveUser(user.id || 0)"
                     :loading="approvingUserId === user.username"
                   />
                   <q-btn
                     label="Reject"
                     color="negative"
                     size="sm"
-                    @click="rejectUser(user.username)"
+                    @click="rejectUser(user.id || 0)"
                     :loading="rejectingUserId === user.username"
                     flat
                   />
@@ -60,8 +60,8 @@ import type { PendingUser } from 'src/services/bansay-service';
 const pendingUsers = ref<PendingUser[]>([]);
 const $q = useQuasar();
 const loading = ref(false);
-const approvingUserId = ref<string | null>(null);
-const rejectingUserId = ref<string | null>(null);
+const approvingUserId = ref<string | null | number>(null);
+const rejectingUserId = ref<string | null | number>(null);
 
 onMounted(async () => {
   await fetchPendingUsers();
@@ -84,11 +84,13 @@ const fetchPendingUsers = async () => {
   }
 };
 
-const approveUser = async (userId: string) => {
+const approveUser = async (userId: string | number) => {
   approvingUserId.value = userId;
   try {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const result = await BansayService.getInstance().patchUser(String(userId), { status: 'Active' });
+    const result = await BansayService.getInstance().patchUser(String(userId), {
+      status: 'Active',
+    });
 
     $q.notify({
       type: 'positive',
@@ -109,7 +111,7 @@ const approveUser = async (userId: string) => {
   }
 };
 
-const rejectUser = async (userId: string) => {
+const rejectUser = async (userId: string | number) => {
   rejectingUserId.value = userId;
   try {
     await BansayService.getInstance().patchUser(userId, { status: 'Disabled' });
